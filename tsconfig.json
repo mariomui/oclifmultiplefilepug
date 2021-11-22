@@ -1,14 +1,31 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
-    "declaration": true,
-    "importHelpers": true,
+    // do not compile anything, this file is just to configure type checking
+    // the compilation is configured in tsconfig.build.json
+    "noEmit": true,
+    // check JS files, but do not compile them => tsconfig.build.json
+    "allowJs": true,
+    "checkJs": true,
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "outDir": "./build/",
+    "removeComments": false,
     "module": "commonjs",
-    "outDir": "lib",
-    "rootDir": "src",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    // this is necessary for the automatic typing of the adapter config
+    "resolveJsonModule": true,
+    "jsx": "react",
+    // Set this to false if you want to disable the very strict rules (not recommended)
     "strict": true,
-    "target": "es2017"
+    "importsNotUsedAsValues": "error",
+    // Consider targetting es2017 or higher if you require the new NodeJS 8+ features
+    "target": "es2017",
+    "sourceMap": true,
+    "inlineSourceMap": false,
+    "watch": false
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["**/*.ts", "**/*.d.ts"],
+  "exclude": ["build/**", "node_modules/**", "admin/**"]
 }
