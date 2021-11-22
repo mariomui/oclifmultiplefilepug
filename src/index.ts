@@ -1,9 +1,10 @@
 import { Command, flags } from "@oclif/command";
 import * as pug from "pug";
-import * as listr from "listr";
-import { setupMaster } from "cluster";
-import { createWriteStream, fstat, writeFile } from "fs";
+import ListR, { ListrTask } from "listr";
+import { writeFile } from "fs";
 import * as path from "path";
+import execa from "execa";
+
 interface ITemplatedFile {
   templateLocation: String;
   data: {
@@ -12,11 +13,11 @@ interface ITemplatedFile {
     fileName: String;
   };
 }
-interface IObjo {
-  err?: unknown;
-  path?: string;
-  desc?: string;
-}
+// interface IObjo {
+//   err?: unknown;
+//   path?: string;
+//   desc?: string;
+// }
 class Mynewcli extends Command {
   static description = "describe the command here";
 
@@ -55,6 +56,59 @@ class Mynewcli extends Command {
       return [pug.compileFile(file.templateLocation), file.data];
     });
   };
+
+  splitGit = (gitCommand: string): string[] => {
+    return gitCommand.slice(1).split(" ");
+  };
+  getAllAndCommit = () => {
+    return {
+      title: "getallandcommit",
+      task: async (ctx: ListR.ListrContext) => {
+        console.log(ctx.currentBranch, "whats my ctx");
+        let doNewBranch = false;
+        let counter = 0;
+        if (ctx.currentBranch === "master") {
+          doNewBranch = true;
+        }
+
+        await execa("git", ["add", "-A"]);
+        await execa("git", ["commit", "-m", '"whassup"']);
+        if (doNewBranch) {
+          await execa("git", ["checkout", "-b", "" + counter]);
+        } else {
+          counter = ctx.currentBranch++;
+          await execa("git", ["checkout", "-b", "" + ++counter]);
+        }
+      },
+    };
+  };
+  getCurrentBranch = () => {
+    // await Promise.resolve(null);
+    // try {
+
+    return {
+      title: "addAllAndCommit",
+      task: async (ctx: ListR.ListrContext) => {
+        const { stdout } = await execa("git", [
+          "rev-parse",
+          "--abbrev-ref",
+          "head",
+        ]);
+        console.log(stdout, "whats my branch");
+        ctx.currentBranch = stdout;
+      },
+    };
+    // }
+    //  catch (err) {
+    //   return Promise.resolve({
+    //     title: "addAllAndCommit",
+    //     task: () => {
+    //       console.log("kkd");
+    //     },
+    //   });
+    // }
+  };
+
   createFiles = (setups: any[]): Promise<unknown> => {
     const pSetups = setups.map((setup) => {
       console.log(setup);
@@ -72,9 +126,11 @@ class Mynewcli extends Command {
     return Promise.all(pSetups);
     // Promise.all())
   };
-  runTasks = (setups: any[]) => {
+  runTasks = async (setups: any[]) => {
     if (setups.length === 0) return;
-    const listR = new listr([
+    const task2 = this.getCurrentBranch();
+    const task3 = this.getAllAndCommit();
+    const listR = new ListR([
       {
         title: "hi",
         task: async () => {
@@ -82,6 +138,8 @@ class Mynewcli extends Command {
           console.log(waited);
         },
       },
+      task2,
+      task3,
     ]);
     listR.run();
   };
@@ -106,7 +164,7 @@ class Mynewcli extends Command {
       this.setups.push([useSetup(data), currentPath]);
     });
 
-    this.runTasks(this.setups);
+    await this.runTasks(this.setups);
   }
 }
 
