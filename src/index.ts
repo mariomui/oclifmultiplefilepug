@@ -38,8 +38,56 @@ class Mynewcli extends Command {
       templateLocation: "./src/templates/example.pug",
       data: {
         dirPath: "./src/destination",
-        yourMom: "dana",
-        fileName: "dana",
+        yourMom: "mario1",
+        fileName: "mario1",
+      },
+    },
+    {
+      templateLocation: "./src/templates/example.pug",
+      data: {
+        dirPath: "./src/destination",
+        yourMom: "mario2",
+        fileName: "mario2",
+      },
+    },
+    {
+      templateLocation: "./src/templates/example.pug",
+      data: {
+        dirPath: "./src/destination",
+        yourMom: "mario3",
+        fileName: "mario3",
+      },
+    },
+    {
+      templateLocation: "./src/templates/example.pug",
+      data: {
+        dirPath: "./src/destination",
+        yourMom: "mario4",
+        fileName: "mario4",
+      },
+    },
+    {
+      templateLocation: "./src/templates/example.pug",
+      data: {
+        dirPath: "./src/destination",
+        yourMom: "mario5",
+        fileName: "mario5",
+      },
+    },
+    {
+      templateLocation: "./src/templates/example.pug",
+      data: {
+        dirPath: "./src/destination",
+        yourMom: "mario6",
+        fileName: "mario6",
+      },
+    },
+    {
+      templateLocation: "./src/templates/example.pug",
+      data: {
+        dirPath: "./src/destination",
+        yourMom: "mario7",
+        fileName: "mario7",
       },
     },
     {
