@@ -13,11 +13,11 @@ interface ITemplatedFile {
     fileName: String;
   };
 }
-// interface IObjo {
-//   err?: unknown;
-//   path?: string;
-//   desc?: string;
-// }
+interface IFileCreatingFeedback {
+  err?: unknown;
+  path?: string;
+  desc?: string;
+}
 class Mynewcli extends Command {
   static description = "describe the command here";
 
@@ -157,8 +157,8 @@ class Mynewcli extends Command {
     // }
   };
 
-  createFiles = (setups: any[]): Promise<unknown> => {
-    const pSetups = setups.map((setup) => {
+  createFiles = async (setups: any[]): Promise<any> => {
+    const pSetups: Promise<IFileCreatingFeedback>[] = setups.map((setup) => {
       console.log(setup);
       const [data, path] = setup;
       return new Promise((resolve, reject) => {
@@ -182,8 +182,12 @@ class Mynewcli extends Command {
       {
         title: "hi",
         task: async () => {
-          const waited = await this.createFiles(setups);
-          console.log(waited);
+          const waited: IFileCreatingFeedback[] = await this.createFiles(
+            setups
+          );
+          if (waited.every((wait) => wait.desc === "done")) {
+            console.log(waited);
+          }
         },
       },
       task2,
